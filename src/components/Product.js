@@ -14,7 +14,7 @@ type Props = {
   }>,
   getBasket: Function,
   id: string,
-  updateBasket: (a: number, b: number) => void
+  updateBasket: (a: number, b: number) => void,
 }
 
 type State = {
@@ -52,11 +52,14 @@ export class Product extends React.Component<Props, State> {
     })
   }
   componentWillReceiveProps(newProps: Props) {
-    newProps.basket.map(item => {
-      this.setState(prevState => ({
-        basket: [...prevState.basket, item.Product.ID],
-      }))
-    })
+    newProps.basket.map(
+      (item): null => {
+        this.setState(prevState => ({
+          basket: [...prevState.basket, item.Product.ID],
+        }))
+        return null
+      }
+    )
   }
 
   render() {

@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Registration } from "../components/Registration"
@@ -19,7 +21,7 @@ class RegistrationContainer extends Component {
         <Registration
           registration={toRegistration}
           error={registration.error}
-          login={login.isLogin}
+          isLogin={login.isLogin}
           success={registration.success}
           regReq={toRegistrationReq}
         />
