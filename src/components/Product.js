@@ -1,29 +1,30 @@
 // @flow
-
 import { HTTP } from "../utils/api"
 import React from "react"
 import { Grid, Row, Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
+type Data = {
+  Name: string,
+  Description: string,
+  Count: number,
+  ID: number,
+}
+
 type Props = {
   login: boolean,
   basket: Array<{
     Product: {
-      ID: string,
+      ID: number,
     },
   }>,
-  getBasket: Function,
   id: string,
   updateBasket: (a: number, b: number) => void,
+  getBasket: () => void,
 }
 
 type State = {
-  data: {
-    Name: string,
-    Description: string,
-    Count: number,
-    ID: number,
-  },
+  data: Data,
   basket: Array<mixed>,
 }
 
@@ -47,7 +48,11 @@ export class Product extends React.Component<Props, State> {
       params: {
         id: this.props.id,
       },
-    }).then(function(response) {
+    }).then(function(response: {
+      data: {
+        body: Data,
+      },
+    }) {
       self.setState({ data: response.data.body })
     })
   }

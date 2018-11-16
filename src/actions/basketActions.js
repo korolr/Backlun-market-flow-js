@@ -1,51 +1,58 @@
+// @flow
 import { HTTP } from "../utils/api"
 
 import { logOut403 } from "./loginActions"
+import type {
+  RequestAction,
+  SuccessAction,
+  ClearAction,
+  FailAction,
+} from "../reducers/basket"
+import type { State } from "../reducers/index"
+import type { Dispatch as ReduxDispatch } from "redux"
+type DataErr = { response: { data: { message: string } } }
+type Data = { data: { body: Array<mixed> } }
+type DataMess = { data: { message: string, body: number } }
 
-export const BASKET_REQUEST = "BASKET_REQUEST"
-export const BASKET_SUCCESS = "BASKET_SUCCESS"
-export const BASKET_FAIL = "BASKET_FAIL"
-export const BASKET_CLEAR = "BASKET_CLEAR"
+type Action = RequestAction | SuccessAction | ClearAction | FailAction
+
+type MyDispatch = ReduxDispatch<Action>
 
 export function getBasket() {
-  return (dispatch, getState) => {
+  return (dispatch: MyDispatch, getState: () => State): void => {
     const state = getState()
     dispatch({
-      type: BASKET_REQUEST,
+      type: "BASKET_REQUEST",
     })
 
-    HTTP.get(
-      `api/get/backet`,
-      {
-        params: {
-          token: state.login.token,
-        },
+    HTTP.get(`api/get/backet`, {
+      params: {
+        token: state.login.token,
       },
-      {}
-    )
-      .then(function(response) {
+    })
+      .then(function(response: Data) {
         if (response.data.body !== null) {
           dispatch({
-            type: BASKET_SUCCESS,
+            type: "BASKET_SUCCESS",
             payload: response.data.body,
           })
         }
       })
-      .catch(function(err) {
+      .catch(function(err: DataErr) {
         logOut403(err, dispatch)
         dispatch({
-          type: BASKET_FAIL,
+          type: "BASKET_FAIL",
           payload: "Ошибка сервера",
         })
       })
   }
 }
 
-export function updateBasket(product, count) {
-  return (dispatch, getState) => {
+export function updateBasket(product: string, count: number) {
+  return (dispatch: MyDispatch, getState: () => State): void => {
     const state = getState()
     dispatch({
-      type: BASKET_REQUEST,
+      type: "BASKET_REQUEST",
     })
 
     HTTP.post(
@@ -59,30 +66,26 @@ export function updateBasket(product, count) {
         },
       }
     )
-      .then(function(response) {
+      .then(function(response: DataMess) {
         if (response.data.message === "Success") {
-          HTTP.get(
-            `api/get/backet`,
-            {
-              params: {
-                token: state.login.token,
-              },
+          HTTP.get(`api/get/backet`, {
+            params: {
+              token: state.login.token,
             },
-            {}
-          ).then(function(response) {
+          }).then(function(response: Data) {
             if (response.data.body !== null) {
               dispatch({
-                type: BASKET_SUCCESS,
+                type: "BASKET_SUCCESS",
                 payload: response.data.body,
               })
             }
           })
         }
       })
-      .catch(function(err) {
+      .catch(function(err: DataErr) {
         logOut403(err, dispatch)
         dispatch({
-          type: BASKET_FAIL,
+          type: "BASKET_FAIL",
           payload: "Ошибка сервера",
         })
       })
@@ -90,10 +93,10 @@ export function updateBasket(product, count) {
 }
 
 export function buyBasket() {
-  return (dispatch, getState) => {
+  return (dispatch: MyDispatch, getState: () => State): void => {
     const state = getState()
     dispatch({
-      type: BASKET_REQUEST,
+      type: "BASKET_REQUEST",
     })
 
     HTTP.post(
@@ -107,14 +110,14 @@ export function buyBasket() {
     )
       .then(function(response) {
         dispatch({
-          type: BASKET_SUCCESS,
+          type: "BASKET_SUCCESS",
           payload: [],
         })
       })
-      .catch(function(err) {
+      .catch(function(err: DataErr) {
         logOut403(err, dispatch)
         dispatch({
-          type: BASKET_FAIL,
+          type: "BASKET_FAIL",
           payload: "Ошибка сервера",
         })
       })
@@ -123,7 +126,7 @@ export function buyBasket() {
 
 export function clearBasket() {
   return {
-    type: BASKET_CLEAR,
+    type: "BASKET_CLEAR",
     payload: [],
   }
 }

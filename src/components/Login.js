@@ -1,3 +1,4 @@
+// @flow
 import React from "react"
 import {
   Grid,
@@ -8,24 +9,42 @@ import {
   FormControl,
   Button,
 } from "react-bootstrap"
-import PropTypes from "prop-types"
 import history from "../history"
 
-export class Login extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { login: "", password: "" }
+type Props = {
+  login: (a: string, b: string) => void,
+  getBasket: Function,
+  isLogin: boolean,
+  error: boolean,
+  loginReq: () => void,
+}
+
+type State = {
+  login: string,
+  password: string,
+}
+
+export class Login extends React.Component<Props, State> {
+  state = {
+    login: "",
+    password: "",
   }
 
-  onLoginChange = event => {
-    this.setState({ login: event.target.value })
+  onLoginChange = (event: SyntheticEvent<HTMLButtonElement>) => {
+    let target = event.target
+    if (target instanceof HTMLInputElement) {
+      this.setState({ login: target.value })
+    }
   }
 
-  onPasswordChange = event => {
-    this.setState({ password: event.target.value })
+  onPasswordChange = (event: SyntheticEvent<HTMLButtonElement>) => {
+    let target = event.target
+    if (target instanceof HTMLInputElement) {
+      this.setState({ password: target.value })
+    }
   }
 
-  handleSubmit = event => {
+  handleSubmit = (event: SyntheticEvent<HTMLButtonElement>) => {
     this.props.login(this.state.login, this.state.password)
     this.setState({ password: "" })
     event.preventDefault()
@@ -87,11 +106,6 @@ export class Login extends React.Component {
       </Grid>
     )
   }
-}
-
-Login.propTypes = {
-  login: PropTypes.func.isRequired,
-  error: PropTypes.bool.isRequired,
 }
 
 export default Login

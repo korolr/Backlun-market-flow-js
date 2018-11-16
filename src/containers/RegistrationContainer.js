@@ -1,5 +1,4 @@
 // @flow
-
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Registration } from "../components/Registration"
@@ -7,6 +6,18 @@ import {
   registrationAction,
   registrationReq,
 } from "../actions/registrationActions"
+import type { State, RootDispatch } from "../reducers/index"
+import type {
+  Connector,
+  MapDispatchToProps,
+  MapStateToProps,
+} from "react-redux"
+
+type StateProps = {
+  b: number,
+  d: number,
+  toRegistration: (string, string, string, string) => void,
+}
 
 class RegistrationContainer extends Component {
   render() {
@@ -30,14 +41,14 @@ class RegistrationContainer extends Component {
   }
 }
 
-const mapStateToProps = store => {
+const mapStateToProps = (store: State) => {
   return {
     registration: store.registration,
     login: store.login,
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: RootDispatch) => {
   return {
     toRegistration: (login, password, name, address) =>
       dispatch(registrationAction(login, password, name, address)),
@@ -45,7 +56,9 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(
+const connector: Connector<{}, StateProps> = connect(
   mapStateToProps,
   mapDispatchToProps
-)(RegistrationContainer)
+)
+
+export default connector(RegistrationContainer)

@@ -1,17 +1,41 @@
+// @flow
 import React from "react"
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from "react-bootstrap"
 import { Link } from "react-router-dom"
-import PropTypes from "prop-types"
 import { HTTP } from "../utils/api"
 
-export class Header extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { data: [] }
+type Data = Array<{
+  ID: number,
+  Category: number,
+  Name: string,
+}>
+
+type Props = {
+  basket: Array<{
+    Product: {
+      ID: number,
+    },
+  }>,
+  loginOut: () => void,
+  isLogin: boolean,
+}
+
+type State = {
+  data: Data,
+}
+
+export class Header extends React.Component<Props, State> {
+  state = {
+    data: [],
   }
+
   componentDidMount() {
     let self = this
-    HTTP.get(`api/get/categories`).then(function(response) {
+    HTTP.get(`api/get/categories`).then(function(response: {
+      data: {
+        body: Data,
+      },
+    }) {
       self.setState({ data: response.data.body })
     })
   }
@@ -71,10 +95,6 @@ export class Header extends React.Component {
       </div>
     )
   }
-}
-
-Header.propTypes = {
-  loginOut: PropTypes.func.isRequired,
 }
 
 export default Header

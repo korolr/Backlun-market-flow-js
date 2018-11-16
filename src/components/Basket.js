@@ -1,11 +1,28 @@
+// @flow
 import React from "react"
 import { Grid, Row, Button } from "react-bootstrap"
-import PropTypes from "prop-types"
 
-export class Basket extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { price: 0 }
+type Props = {
+  basket: Array<{
+    Product: {
+      ID: number,
+      Price: number,
+      Name: string,
+      Description: string,
+    },
+    Count: number,
+  }>,
+  updateBasket: (a: number, b: number) => void,
+  buyBasket: Function,
+}
+
+type State = {
+  price: number,
+}
+
+export class Basket extends React.Component<Props, State> {
+  state = {
+    price: 0,
   }
   componentWillReceiveProps() {
     this.setState({
@@ -15,6 +32,7 @@ export class Basket extends React.Component {
       this.setState(prevState => ({
         price: prevState.price + item.Count * item.Product.Price,
       }))
+      return null
     })
   }
 
@@ -26,10 +44,11 @@ export class Basket extends React.Component {
       this.setState(prevState => ({
         price: prevState.price + item.Count * item.Product.Price,
       }))
+      return null
     })
   }
   render() {
-    const { basket, updateBasket, buyBasket, clearBasket } = this.props
+    const { basket, updateBasket, buyBasket } = this.props
     return (
       <Grid>
         <Row className="show-grid">
@@ -41,6 +60,7 @@ export class Basket extends React.Component {
                   <img
                     style={{ height: "200px" }}
                     src="https://avatars.mds.yandex.net/get-mpic/200316/img_id9183304286749674957.jpeg/9hq"
+                    alt="Product"
                   />
                   <p>{item.Product.Description}</p>
                   <h3>Число в корзине {item.Count}</h3>
