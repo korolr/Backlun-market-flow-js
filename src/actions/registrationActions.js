@@ -1,13 +1,29 @@
+// @flow
 import { HTTP } from "../utils/api"
 
-export const REGISTRATION_REQUEST = "REGISTRATION_REQUEST"
-export const REGISTRATION_SUCCESS = "REGISTRATION_SUCCESS"
-export const REGISTRATION_FAIL = "REGISTRATION_FAIL"
+import type {
+  RequestAction,
+  SuccessAction,
+  FailAction,
+} from "../reducers/registration"
+import type { State } from "../reducers/index"
+import type { Dispatch as ReduxDispatch } from "redux"
+type DataErr = { response: { data: { message: string } } }
+type Data = { data: { message: string, body: number } }
 
-export function registrationAction(login, password, name, address) {
-  return dispatch => {
+type Action = RequestAction | SuccessAction | FailAction
+
+type MyDispatch = ReduxDispatch<Action>
+
+export function registrationAction(
+  login: string,
+  password: string,
+  name: string,
+  address: string
+) {
+  return (dispatch: MyDispatch, getState: () => State): void => {
     dispatch({
-      type: REGISTRATION_REQUEST,
+      type: "REGISTRATION_REQUEST",
     })
 
     HTTP.post(
@@ -22,27 +38,27 @@ export function registrationAction(login, password, name, address) {
         },
       }
     )
-      .then(function(response) {
+      .then(function(response: Data) {
         if (response.data.message === "Success") {
           dispatch({
-            type: REGISTRATION_SUCCESS,
+            type: "REGISTRATION_SUCCESS",
           })
         }
       })
-      .catch(function(err) {
+      .catch(function(err: DataErr) {
         if (err.response.data.message === "User with this login is exists") {
           dispatch({
-            type: REGISTRATION_FAIL,
+            type: "REGISTRATION_FAIL",
             payload: "Такой пользователь уже есть",
           })
         } else if (err.response.data.message === "Incorrect data") {
           dispatch({
-            type: REGISTRATION_FAIL,
+            type: "REGISTRATION_FAIL",
             payload: "Не правильные данные",
           })
         } else {
           dispatch({
-            type: REGISTRATION_FAIL,
+            type: "REGISTRATION_FAIL",
             payload: "Ошибка сервера",
           })
         }
@@ -52,6 +68,6 @@ export function registrationAction(login, password, name, address) {
 
 export function registrationReq() {
   return {
-    type: REGISTRATION_REQUEST,
+    type: "REGISTRATION_REQUEST",
   }
 }

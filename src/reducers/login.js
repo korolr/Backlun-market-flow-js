@@ -1,32 +1,37 @@
-import {
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  LOGIN_OUT,
-} from "../actions/loginActions"
+// @flow
 
-const initialState = {
+export type LoginState = { token: ?number, error: string, isLogin: boolean }
+
+export type RequestAction = { type: "LOGIN_REQUEST" }
+export type SuccessAction = { type: "LOGIN_SUCCESS", payload: number }
+export type OutAction = { type: "LOGIN_OUT" }
+export type FailAction = { type: "LOGIN_FAIL", payload: string }
+
+export type ActionLogin = RequestAction | SuccessAction | OutAction | FailAction
+
+const initialState: LoginState = {
   token: null,
   error: "",
   isLogin: false,
 }
 
-export function loginReducer(state = initialState, action) {
+export function loginReducer(
+  state: LoginState = initialState,
+  action: ActionLogin
+): LoginState {
   switch (action.type) {
-    case LOGIN_REQUEST:
+    case "LOGIN_REQUEST":
       return { ...state, token: null, error: "", isLogin: false }
-
-    case LOGIN_SUCCESS:
+    case "LOGIN_SUCCESS":
       return {
         ...state,
         token: action.payload,
         isLogin: true,
       }
-    case LOGIN_OUT:
+    case "LOGIN_OUT":
       return { ...state, token: null, error: "", isLogin: false }
-    case LOGIN_FAIL:
+    case "LOGIN_FAIL":
       return { ...state, token: null, error: action.payload, isLogin: false }
-
     default:
       return state
   }

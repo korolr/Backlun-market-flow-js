@@ -1,32 +1,70 @@
+// @flow
 import { HTTP } from "../utils/api"
 import React from "react"
 import { Grid, Row, Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
-export class Product extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { data: [], basket: [] }
+type Data = {
+  Name: string,
+  Description: string,
+  Count: number,
+  ID: number,
+}
+
+type Props = {
+  login: boolean,
+  basket: Array<{
+    Product: {
+      ID: number,
+    },
+  }>,
+  id: string,
+  updateBasket: (a: number, b: number) => void,
+  getBasket: () => void,
+}
+
+type State = {
+  data: Data,
+  basket: Array<mixed>,
+}
+
+export class Product extends React.Component<Props, State> {
+  state = {
+    data: {
+      Name: "",
+      Description: "",
+      Count: 0,
+      ID: 0,
+    },
+    basket: [],
   }
   componentDidMount() {
     if (this.props.login) {
       this.props.getBasket()
     }
+
     let self = this
     HTTP.get(`/api/get/product`, {
       params: {
         id: this.props.id,
       },
-    }).then(function(response) {
+    }).then(function(response: {
+      data: {
+        body: Data,
+      },
+    }) {
       self.setState({ data: response.data.body })
     })
   }
-  componentWillReceiveProps(newProps) {
-    newProps.basket.map(item => {
-      this.setState(prevState => ({
-        basket: [...prevState.basket, item.Product.ID],
-      }))
-    })
+  componentWillReceiveProps(newProps: Props) {
+    newProps.basket.map(
+      (item): null => {
+        this.setState(prevState => ({
+          basket: [...prevState.basket, item.Product.ID],
+        }))
+        return null
+      }
+    )
   }
 
   render() {
@@ -36,6 +74,7 @@ export class Product extends React.Component {
           <h1>{this.state.data.Name}</h1>
           <img
             style={{ height: "300px" }}
+            alt="none"
             src="https://avatars.mds.yandex.net/get-mpic/200316/img_id9183304286749674957.jpeg/9hq"
           />
           <p>{this.state.data.Description}</p>

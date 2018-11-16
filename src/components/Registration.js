@@ -1,3 +1,4 @@
+// @flow
 import React from "react"
 import {
   Grid,
@@ -8,37 +9,69 @@ import {
   FormControl,
   Button,
 } from "react-bootstrap"
-import PropTypes from "prop-types"
 import history from "../history"
 
-export class Registration extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { login: "", password: "", name: "", address: "" }
+type Props = {
+  registration: (
+    login: string,
+    password: string,
+    name: string,
+    adress: string
+  ) => void,
+  error: boolean,
+  success: boolean,
+  isLogin: boolean,
+  regReq: () => void,
+}
+
+type State = {
+  login: string,
+  password: string,
+  name: string,
+  adress: string,
+}
+
+export class Registration extends React.Component<Props, State> {
+  state = {
+    login: "",
+    password: "",
+    name: "",
+    adress: "",
+  }
+  onLoginChange = (event: SyntheticEvent<HTMLButtonElement>) => {
+    let target = event.target
+    if (target instanceof HTMLInputElement) {
+      this.setState({ login: target.value })
+    }
   }
 
-  onLoginChange = event => {
-    this.setState({ login: event.target.value })
+  onPasswordChange = (event: SyntheticEvent<HTMLButtonElement>) => {
+    let target = event.target
+    if (target instanceof HTMLInputElement) {
+      this.setState({ password: target.value })
+    }
   }
 
-  onPasswordChange = event => {
-    this.setState({ password: event.target.value })
+  onNameChange = (event: SyntheticEvent<HTMLButtonElement>) => {
+    let target = event.target
+    if (target instanceof HTMLInputElement) {
+      this.setState({ name: target.value })
+    }
   }
 
-  onNameChange = event => {
-    this.setState({ name: event.target.value })
+  onAddressChange = (event: SyntheticEvent<HTMLButtonElement>) => {
+    let target = event.target
+    if (target instanceof HTMLInputElement) {
+      this.setState({ adress: target.value })
+    }
   }
 
-  onAddressChange = event => {
-    this.setState({ address: event.target.value })
-  }
-
-  handleSubmit = event => {
+  handleSubmit = (event: SyntheticEvent<HTMLButtonElement>) => {
     this.props.registration(
       this.state.login,
       this.state.password,
       this.state.name,
-      this.state.address
+      this.state.adress
     )
     this.setState({ password: "" })
     event.preventDefault()
@@ -101,7 +134,7 @@ export class Registration extends React.Component {
               <Col sm={3}>
                 <FormControl
                   placeholder="Adddres"
-                  value={this.state.address}
+                  value={this.state.adress}
                   onChange={this.onAddressChange}
                 />
               </Col>
@@ -112,7 +145,7 @@ export class Registration extends React.Component {
             ) : null}
             {this.state.password &&
             this.state.login &&
-            this.state.address &&
+            this.state.adress &&
             this.state.name ? (
               <FormGroup>
                 <Col smOffset={1} sm={3}>
@@ -125,11 +158,6 @@ export class Registration extends React.Component {
       </Grid>
     )
   }
-}
-
-Registration.propTypes = {
-  registration: PropTypes.func.isRequired,
-  error: PropTypes.bool.isRequired,
 }
 
 export default Registration

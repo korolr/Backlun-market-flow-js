@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from "react"
 import { Switch, Route } from "react-router-dom"
 import PrivateRoute from "../containers/PrivateRoute"
@@ -9,7 +10,9 @@ import HomeContainer from "../containers/HomeContainer"
 import ProductContainer from "../containers/ProductContainer"
 import CategoryContainer from "../containers/CategoryContainer"
 
-class App extends Component {
+type Props = {}
+
+class App extends Component<Props> {
   render() {
     return (
       <React.Fragment>

@@ -1,3 +1,4 @@
+// @flow
 import { HTTP } from "../utils/api"
 import React from "react"
 import { Grid, Row, Button } from "react-bootstrap"
@@ -18,25 +19,55 @@ export const Product = styled.div`
   width: 210px;
   text-align: center;
 `
-export class Home extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { data: [], basket: [] }
+
+type Data = Array<{
+  ID: number,
+  Category: number,
+  Name: string,
+}>
+
+type Props = {
+  id: number,
+  login: boolean,
+  getBasket: Function,
+  basket: Array<{
+    Product: {
+      ID: number,
+    },
+  }>,
+  updateBasket: (a: number, b: number) => void,
+  getBasket: () => void,
+}
+
+type State = {
+  data: Data,
+  basket: Array<mixed>,
+}
+
+export class Home extends React.Component<Props, State> {
+  state = {
+    data: [],
+    basket: [],
   }
   componentDidMount() {
     if (this.props.login) {
       this.props.getBasket()
     }
     let self = this
-    HTTP.get(`api/get/products`).then(function(response) {
+    HTTP.get(`api/get/products`).then(function(response: {
+      data: {
+        body: Data,
+      },
+    }) {
       self.setState({ data: response.data.body })
     })
   }
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps(newProps: Props) {
     newProps.basket.map(item => {
       this.setState(prevState => ({
         basket: [...prevState.basket, item.Product.ID],
       }))
+      return null
     })
   }
 
@@ -54,6 +85,7 @@ export class Home extends React.Component {
                       <img
                         style={{ height: "200px" }}
                         src="https://avatars.mds.yandex.net/get-mpic/200316/img_id9183304286749674957.jpeg/9hq"
+                        alt="Product"
                       />
                     </Link>
 
