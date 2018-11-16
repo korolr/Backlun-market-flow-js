@@ -1,4 +1,4 @@
-// flow-typed signature: 9933199c091834f59fd0156e624f0541
+// flow-typed signature: 1d139cfd9fd5646f3ab399021cd0d65b
 // flow-typed version: 998e815df7/react-bootstrap_v0.32.x/flow_>=v0.53.x
 
 declare module "react-bootstrap" {
