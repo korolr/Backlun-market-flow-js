@@ -53,14 +53,15 @@ export class Category extends React.Component<Props, State> {
     if (this.props.login) {
       this.props.getBasket()
     }
-    let self = this
-    HTTP.get(`api/get/products`).then(function(response: {
-      data: {
-        body: Data,
-      },
-    }) {
-      self.setState({ data: response.data.body })
-    })
+    HTTP.get(`api/get/products`).then(
+      function(response: {
+        data: {
+          body: Data,
+        },
+      }) {
+        this.setState({ data: response.data.body })
+      }.bind(this)
+    )
   }
   componentWillReceiveProps(newProps: Props) {
     newProps.basket.map(item => {
