@@ -1,17 +1,27 @@
+// @flow
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Login } from "../components/Login"
 import { loginAction, loginReq } from "../actions/loginActions"
-
-class LoginContainer extends Component {
+import type { State } from "../reducers/index"
+import type { Connector } from "react-redux"
+import type { Dispatch as ReduxDispatch } from "redux"
+import type { Action } from "../reducers"
+type Props = {
+  toLogin: (product: string, count: string) => void,
+  login: boolean,
+  toLoginReq: () => void,
+  error: string,
+}
+class LoginContainer extends Component<Props> {
   render() {
-    const { toLogin, login, toLoginReq } = this.props
+    const { toLogin, login, toLoginReq, error } = this.props
     return (
       <div>
         <Login
           login={toLogin}
-          error={login.error}
-          isLogin={login.isLogin}
+          error={error}
+          isLogin={login}
           loginReq={toLoginReq}
         />
       </div>
@@ -19,20 +29,24 @@ class LoginContainer extends Component {
   }
 }
 
-const mapStateToProps = store => {
+const mapStateToProps = (store: State) => {
   return {
-    login: store.login,
+    error: store.login.error,
+    login: store.login.isLogin,
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: ReduxDispatch<State, Action>) => {
   return {
-    toLogin: (email, password) => dispatch(loginAction(email, password)),
+    toLogin: (email: string, password: string) =>
+      dispatch(loginAction(email, password)),
     toLoginReq: () => dispatch(loginReq()),
   }
 }
 
-export default connect(
+const connector: Connector<LoginContainer, Props> = connect(
   mapStateToProps,
   mapDispatchToProps
-)(LoginContainer)
+)
+
+export default connector(LoginContainer)

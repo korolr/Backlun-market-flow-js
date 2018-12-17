@@ -1,9 +1,19 @@
+// @flow
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Home } from "../components/Home"
 import { getBasket, updateBasket } from "../actions/basketActions"
-
-class HomeContainer extends Component {
+import type { State } from "../reducers/index"
+import type { Connector } from "react-redux"
+import type { Dispatch as ReduxDispatch } from "redux"
+import type { Action } from "../reducers"
+type Props = {
+  toUpdateBasket: (product: number, count: number) => void,
+  login: boolean,
+  toGetBasket: () => void,
+  basket: any[],
+}
+class HomeContainer extends Component<Props> {
   componentDidMount() {}
   render() {
     const { basket, toGetBasket, login, toUpdateBasket } = this.props
@@ -12,7 +22,7 @@ class HomeContainer extends Component {
         <Home
           basket={basket}
           getBasket={toGetBasket}
-          login={login.isLogin}
+          login={login}
           updateBasket={toUpdateBasket}
         />
       </div>
@@ -20,21 +30,24 @@ class HomeContainer extends Component {
   }
 }
 
-const mapStateToProps = store => {
+const mapStateToProps = (store: State) => {
   return {
     basket: store.basket.data,
-    login: store.login,
+    login: store.login.isLogin,
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: ReduxDispatch<State, Action>) => {
   return {
     toGetBasket: () => dispatch(getBasket()),
-    toUpdateBasket: (product, count) => dispatch(updateBasket(product, count)),
+    toUpdateBasket: (product: string, count: number) =>
+      dispatch(updateBasket(product, count)),
   }
 }
 
-export default connect(
+const connector: Connector<HomeContainer, Props> = connect(
   mapStateToProps,
   mapDispatchToProps
-)(HomeContainer)
+)
+
+export default connector(HomeContainer)

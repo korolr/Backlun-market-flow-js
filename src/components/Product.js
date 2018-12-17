@@ -18,7 +18,7 @@ type Props = {
       ID: number,
     },
   }>,
-  id: string,
+  id: number,
   updateBasket: (a: number, b: number) => void,
   getBasket: () => void,
 }

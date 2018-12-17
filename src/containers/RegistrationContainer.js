@@ -66,7 +66,7 @@ const mapDispatchToProps = (dispatch: ReduxDispatch<State, Action>) => {
   }
 }
 
-const connector: Connector<{}, Props> = connect(
+const connector: Connector<RegistrationContainer, Props> = connect(
   mapStateToProps,
   mapDispatchToProps
 )

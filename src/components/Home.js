@@ -27,7 +27,6 @@ type Data = Array<{
 }>
 
 type Props = {
-  id: number,
   login: boolean,
   getBasket: Function,
   basket: Array<{

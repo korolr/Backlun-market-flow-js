@@ -31,9 +31,10 @@ export function getBasket() {
       },
     })
       .then(function(response: Data) {
+        var data: Array<mixed> = response.data.body
         dispatch({
           type: "BASKET_SUCCESS",
-          payload: response.data.body,
+          payload: data,
         })
       })
       .catch(function(err: DataErr) {
@@ -71,9 +72,10 @@ export function updateBasket(product: string, count: number) {
               token: state.login.token,
             },
           }).then(function(response: Data) {
+            var data: Array<mixed> = response.data.body
             dispatch({
               type: "BASKET_SUCCESS",
-              payload: response.data.body,
+              payload: data,
             })
           })
         }

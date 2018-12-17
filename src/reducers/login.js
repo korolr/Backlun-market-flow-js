@@ -1,9 +1,9 @@
 // @flow
 
-export type LoginState = { token: ?mixed, error: string, isLogin: boolean }
+export type LoginState = { token: ?string, error: string, isLogin: boolean }
 
 export type RequestAction = { type: "LOGIN_REQUEST" }
-export type SuccessAction = { type: "LOGIN_SUCCESS", payload: mixed }
+export type SuccessAction = { type: "LOGIN_SUCCESS", payload: string }
 export type OutAction = { type: "LOGIN_OUT" }
 export type FailAction = { type: "LOGIN_FAIL", payload: string }
 

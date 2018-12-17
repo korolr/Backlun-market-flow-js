@@ -31,9 +31,10 @@ export function loginAction(login: string, password: string) {
     )
       .then(function(response: Data) {
         if (response.data.message === "Success") {
+          var data: string = response.data.body
           dispatch({
             type: "LOGIN_SUCCESS",
-            payload: response.data.body,
+            payload: data,
           })
         }
       })

@@ -13,9 +13,8 @@ import history from "../history"
 
 type Props = {
   login: (a: string, b: string) => void,
-  getBasket: Function,
   isLogin: boolean,
-  error: boolean,
+  error: string,
   loginReq: () => void,
 }
 

@@ -1,14 +1,24 @@
+// @flow
 import React from "react"
 import { Route, Redirect } from "react-router-dom"
 import { connect } from "react-redux"
+import type { State } from "../reducers/index"
+import type { Connector } from "react-redux"
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+type PrivateRouteProps = {
+  component: any,
+  isAuth: boolean,
+}
+
+const PrivateRoute = (props: PrivateRouteProps) => {
+  const { component: Component, isAuth, ...rest } = props
+
   return (
     <Route
       {...rest}
-      render={props =>
-        rest.isAuth ? (
-          <Component {...props} />
+      render={(routeProps: mixed) =>
+        isAuth ? (
+          <Component {...routeProps} />
         ) : (
           <Redirect
             to={{
@@ -21,10 +31,15 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   )
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: State) => {
   return {
     isAuth: state.login.isLogin,
   }
 }
 
-export default connect(mapStateToProps)(PrivateRoute)
+const connector: Connector<{}, PrivateRouteProps> = connect(
+  mapStateToProps,
+  {}
+)
+
+export default connector(PrivateRoute)
