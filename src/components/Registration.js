@@ -18,7 +18,7 @@ type Props = {
     name: string,
     adress: string
   ) => void,
-  error: boolean,
+  error: string,
   success: boolean,
   isLogin: boolean,
   regReq: () => void,

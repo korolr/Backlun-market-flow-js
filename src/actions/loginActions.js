@@ -6,14 +6,14 @@ import type {
   OutAction,
   FailAction,
 } from "../reducers/login"
-import type { State, RootDispatch } from "../reducers/index"
+import type { State } from "../reducers/index"
 import type { Dispatch as ReduxDispatch } from "redux"
 type DataErr = { response: { data: { message: string } } }
-type Data = { data: { message: string, body: number } }
+type Data = { data: { message: string, body: string } }
 
-type Action = RequestAction | SuccessAction | OutAction | FailAction
+type Action = RequestAction | SuccessAction | FailAction | OutAction
 
-type MyDispatch = ReduxDispatch<Action>
+export type MyDispatch = ReduxDispatch<State, Action>
 
 export function loginAction(login: string, password: string) {
   return (dispatch: MyDispatch, getState: () => State): void => {

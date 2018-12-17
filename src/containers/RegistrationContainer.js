@@ -6,24 +6,29 @@ import {
   registrationAction,
   registrationReq,
 } from "../actions/registrationActions"
-import type { State, RootDispatch } from "../reducers/index"
-import type {
-  Connector,
-  MapDispatchToProps,
-  MapStateToProps,
-} from "react-redux"
-
-type StateProps = {
-  b: number,
-  d: number,
-  toRegistration: (string, string, string, string) => void,
+import type { State } from "../reducers/index"
+import type { Connector } from "react-redux"
+import type { Dispatch as ReduxDispatch } from "redux"
+import type { Action } from "../reducers"
+type Props = {
+  toRegistration: (
+    login: string,
+    password: string,
+    name: string,
+    address: string
+  ) => void,
+  error: string,
+  success: boolean,
+  login: boolean,
+  toRegistrationReq: () => void,
 }
 
-class RegistrationContainer extends Component {
+class RegistrationContainer extends Component<Props> {
   render() {
     const {
       toRegistration,
-      registration,
+      error,
+      success,
       login,
       toRegistrationReq,
     } = this.props
@@ -31,9 +36,9 @@ class RegistrationContainer extends Component {
       <div>
         <Registration
           registration={toRegistration}
-          error={registration.error}
-          isLogin={login.isLogin}
-          success={registration.success}
+          error={error}
+          isLogin={login}
+          success={success}
           regReq={toRegistrationReq}
         />
       </div>
@@ -43,20 +48,25 @@ class RegistrationContainer extends Component {
 
 const mapStateToProps = (store: State) => {
   return {
-    registration: store.registration,
-    login: store.login,
+    success: store.registration.success,
+    error: store.registration.error,
+    login: store.login.isLogin,
   }
 }
 
-const mapDispatchToProps = (dispatch: RootDispatch) => {
+const mapDispatchToProps = (dispatch: ReduxDispatch<State, Action>) => {
   return {
-    toRegistration: (login, password, name, address) =>
-      dispatch(registrationAction(login, password, name, address)),
+    toRegistration: (
+      login: string,
+      password: string,
+      name: string,
+      address: string
+    ) => dispatch(registrationAction(login, password, name, address)),
     toRegistrationReq: () => dispatch(registrationReq()),
   }
 }
 
-const connector: Connector<{}, StateProps> = connect(
+const connector: Connector<{}, Props> = connect(
   mapStateToProps,
   mapDispatchToProps
 )

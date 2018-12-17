@@ -13,7 +13,7 @@ type Data = { data: { message: string, body: number } }
 
 type Action = RequestAction | SuccessAction | FailAction
 
-type MyDispatch = ReduxDispatch<Action>
+export type MyDispatch = ReduxDispatch<State, Action>
 
 export function registrationAction(
   login: string,
@@ -40,24 +40,24 @@ export function registrationAction(
     )
       .then(function(response: Data) {
         if (response.data.message === "Success") {
-          dispatch({
+          return dispatch({
             type: "REGISTRATION_SUCCESS",
           })
         }
       })
       .catch(function(err: DataErr) {
         if (err.response.data.message === "User with this login is exists") {
-          dispatch({
+          return dispatch({
             type: "REGISTRATION_FAIL",
             payload: "Такой пользователь уже есть",
           })
         } else if (err.response.data.message === "Incorrect data") {
-          dispatch({
+          return dispatch({
             type: "REGISTRATION_FAIL",
             payload: "Не правильные данные",
           })
         } else {
-          dispatch({
+          return dispatch({
             type: "REGISTRATION_FAIL",
             payload: "Ошибка сервера",
           })

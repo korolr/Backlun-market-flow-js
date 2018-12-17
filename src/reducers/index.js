@@ -9,17 +9,17 @@ import type { LoginState, ActionLogin } from "./login"
 import type { RegistrationState, ActionRegistration } from "./registration"
 import type { Dispatch as ReduxDispatch } from "redux"
 
-export const rootReducer = combineReducers({
-  login: loginReducer,
-  registration: registrationReducer,
-  basket: basketReducer,
-})
-
 export type State = {
   login: LoginState,
   registration: RegistrationState,
   basket: BasketState,
 }
 
-type Action = ActionBasket | ActionLogin | ActionRegistration
+export const rootReducer = combineReducers<{}, State>({
+  login: loginReducer,
+  registration: registrationReducer,
+  basket: basketReducer,
+})
+
+export type Action = ActionBasket | ActionLogin | ActionRegistration
 export type RootDispatch = ReduxDispatch<State, Action>

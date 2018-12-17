@@ -16,7 +16,7 @@ type DataMess = { data: { message: string, body: number } }
 
 type Action = RequestAction | SuccessAction | ClearAction | FailAction
 
-type MyDispatch = ReduxDispatch<Action>
+type MyDispatch = ReduxDispatch<State, Action>
 
 export function getBasket() {
   return (dispatch: MyDispatch, getState: () => State): void => {
@@ -31,12 +31,10 @@ export function getBasket() {
       },
     })
       .then(function(response: Data) {
-        if (response.data.body !== null) {
-          dispatch({
-            type: "BASKET_SUCCESS",
-            payload: response.data.body,
-          })
-        }
+        dispatch({
+          type: "BASKET_SUCCESS",
+          payload: response.data.body,
+        })
       })
       .catch(function(err: DataErr) {
         logOut403(err, dispatch)
@@ -73,12 +71,10 @@ export function updateBasket(product: string, count: number) {
               token: state.login.token,
             },
           }).then(function(response: Data) {
-            if (response.data.body !== null) {
-              dispatch({
-                type: "BASKET_SUCCESS",
-                payload: response.data.body,
-              })
-            }
+            dispatch({
+              type: "BASKET_SUCCESS",
+              payload: response.data.body,
+            })
           })
         }
       })
